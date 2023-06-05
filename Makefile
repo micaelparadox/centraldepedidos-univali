@@ -1,25 +1,28 @@
-.PHONY: help shell migrate rollback seed cache-clear optimize
-
-# Cores
+# Variáveis de Cores
 RED=\033[0;31m
 GREEN=\033[0;32m
 YELLOW=\033[0;33m
 RESET=\033[0m
 
+# Configuração da Fonte
+FONT_SIZE=\033[1;34m
+
 # Target de ajuda
 help:
-	@echo "Comandos disponíveis:"
+	@echo "$(FONT_SIZE)Comandos disponíveis:$(RESET)"
 	@echo "$(YELLOW)  make shell$(RESET)          : Entrar no container"
 	@echo "$(YELLOW)  make migrate$(RESET)        : Executar as migrações do banco de dados"
 	@echo "$(YELLOW)  make rollback$(RESET)       : Reverter a última migração do banco de dados"
 	@echo "$(YELLOW)  make seed$(RESET)           : Popular o banco de dados com dados de exemplo"
 	@echo "$(YELLOW)  make cache-clear$(RESET)    : Limpar o cache da aplicação"
 	@echo "$(YELLOW)  make optimize$(RESET)       : Otimizar a aplicação para melhor desempenho"
+	@echo "$(YELLOW)  make down$(RESET)           : Desligar os contêineres e remover os volumes"
+	@echo "$(YELLOW)  make restart-nginx$(RESET)  : Reiniciar o contêiner do Nginx"
 
 # Entrar no container
 shell:
 	@echo "$(YELLOW)Entrando no container...$(RESET)"
-	@docker exec -it centraldepedidos bash
+	@docker exec -it -w /var/www/html centraldepedidos bash
 
 # Executar as migrações do banco de dados
 migrate:
@@ -45,3 +48,13 @@ cache-clear:
 optimize:
 	@echo "$(YELLOW)Otimizando a aplicação para melhor desempenho...$(RESET)"
 	@docker exec -it centraldepedidos php artisan optimize
+
+# Desligar os contêineres e remover os volumes
+down:
+	@echo "$(YELLOW)Desligando os contêineres e removendo os volumes...$(RESET)"
+	@docker-compose down --volumes --remove-orphans
+
+# Reiniciar o contêiner do Nginx
+restart-nginx:
+	@echo "$(YELLOW)Reiniciando o contêiner do Nginx...$(RESET)"
+	@docker-compose restart webserver
