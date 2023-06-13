@@ -1,4 +1,4 @@
-.PHONY: help shell migrate rollback seed cache-clear optimize
+.PHONY: help shell migrate rollback seed cache-clear optimize create-project delete-project
 
 # Cores
 RED=\033[0;31m
@@ -15,6 +15,8 @@ help:
 	@echo "$(YELLOW)  make seed$(RESET)           : Popular o banco de dados com dados de exemplo"
 	@echo "$(YELLOW)  make cache-clear$(RESET)    : Limpar o cache da aplicação"
 	@echo "$(YELLOW)  make optimize$(RESET)       : Otimizar a aplicação para melhor desempenho"
+	@echo "$(YELLOW)  make create-project$(RESET) : Criar um novo projeto Laravel"
+	@echo "$(YELLOW)  make delete-project$(RESET) : Deletar o projeto Laravel"
 
 # Entrar no container
 shell:
@@ -45,3 +47,14 @@ cache-clear:
 optimize:
 	@echo "$(YELLOW)Otimizando a aplicação para melhor desempenho...$(RESET)"
 	@docker exec -it centraldepedidos php artisan optimize
+
+# Create a new Laravel project
+create-project:
+	@echo "$(YELLOW)Creating a new Laravel project...$(RESET)"
+	@docker exec -it centraldepedidos bash -c "cd /var/www/html && composer create-project --prefer-dist laravel/laravel ."
+
+# Delete the Laravel project
+delete-project:
+	@echo "$(YELLOW)Deleting the Laravel project...$(RESET)"
+	@docker exec -it centraldepedidos bash -c "rm -rf {,.[!.],..?}*"
+
