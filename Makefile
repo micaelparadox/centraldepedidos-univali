@@ -17,6 +17,9 @@ help:
 	@echo "$(YELLOW)  make optimize$(RESET)       : Otimizar a aplicação para melhor desempenho"
 	@echo "$(YELLOW)  make create-project$(RESET) : Criar um novo projeto Laravel"
 	@echo "$(YELLOW)  make delete-project$(RESET) : Deletar o projeto Laravel"
+	@echo "$(YELLOW)  make start$(RESET)          : Iniciar os containers Docker"
+	@echo "$(YELLOW)  make stop$(RESET)           : Parar os containers Docker"
+	@echo "$(YELLOW)  make rebuild$(RESET)        : Reconstruir os containers Docker"
 
 # Entrar no container
 shell:
@@ -58,3 +61,17 @@ delete-project:
 	@echo "$(YELLOW)Deleting the Laravel project...$(RESET)"
 	@docker exec -it centraldepedidos bash -c "rm -rf {,.[!.],..?}*"
 
+# Iniciar containers Docker
+start:
+	@echo "$(YELLOW)Iniciando os containers Docker...$(RESET)"
+	@docker-compose up -d
+
+# Parar containers Docker
+stop:
+	@echo "$(YELLOW)Parando os containers Docker...$(RESET)"
+	@docker-compose down
+
+# Reconstruir containers Docker
+rebuild:
+	@echo "$(YELLOW)Reconstruindo os containers Docker...$(RESET)"
+	@docker-compose up -d --build
